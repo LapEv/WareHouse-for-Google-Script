@@ -25,7 +25,7 @@
     position: absolute;
     background-color: rgba(0, 0, 0, 0.4);
     width: 95%;
-    height: 98%;
+    height: 100%;
     border-radius: 4px;
     z-index: 3;
   }
@@ -55,13 +55,14 @@
     } */
   .listSelect select,
   .listSelect input[type=text],
+  .listSelect input[type=number],
   .listSelect input[type=date] {
     display: block;
     /* margin: 0 auto; */
     /* background: -webkit-gradient(linear, left top, left bottom, from(#30cfd0), to(#330867));
       background: linear-gradient(to bottom, #30cfd0 0%, #330867 100%); */
     /* color: #FFFFFF; */
-    width: 220px;
+    width: 270px;
     padding: 5px 10px;
     margin: 5px auto;
     font-size: 11pt;
@@ -74,19 +75,19 @@
 
   .listArea {
     display: block;
-    margin: 33px auto;
+    margin: 32px auto;
     color: #000000;
     width: 220px;
     padding: 4px;
-    font-size: 13pt;
+    font-size: 12pt;
     font-weight: bold;
     text-align: left;
     height: 25px;
   }
 
   .there,
-  .providerName {
-    margin-top: -10px
+  .labelProviderName {
+    margin-top: -15px
   }
 
   .comment {
@@ -98,6 +99,18 @@
     font-size: 11pt;
     text-align: left;
     height: 60px;
+  }
+
+  .labelComment {
+    height: 60px;
+  }
+
+  .checkboxContainer {
+    height: 0px
+  }
+
+  .checkboxInput {
+    cursor: pointer;
   }
 
   .buttonGroup {
@@ -114,16 +127,12 @@
       bottom:0; */
     cursor: pointer;
     font-size: 16px;
-    padding: 6px 12px;
-    margin: 10px auto;
+    padding: 6px 30px;
+    margin: 0 auto;
     border: 1px solid #330867;
     border-radius: 4px;
     -webkit-box-shadow: 0 0 13px 2px #000;
     box-shadow: 0 0 13px 2px #000;
-  }
-
-  #btnOK {
-    margin-top: 40px
   }
 
   .modal {
@@ -138,11 +147,14 @@
     z-index: 5;
     left: 50%;
     margin-left: -45%;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
   }
 
   svg {
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
     top: 30%;
     padding-left: 10px;
     z-index: 5;
@@ -151,16 +163,16 @@
   .modal_text {
     padding-left: 10px;
     padding-right: 10px;
-    padding-top: 20px;
+    width: 65%;
     z-index: 5;
   }
 
   #buttonOK {
     position: absolute;
     left: 45%;
-    width: 50px;
+    width: 90px;
     height: 30px;
-    bottom: 5px;
+    bottom: 15px;
     z-index: 6;
   }
 </style>
@@ -170,43 +182,54 @@
     <div class="loader"></div>
   </div>
   <div class="modal"></div>
-  <form id="form" style="padding: 20px;text-align:center;">
+  <form id="form" style="text-align:center;">
     <div class="listSelect">
-      <label class="listArea providerName">Поставщик<input autocomplete="off" id="providerName" type="text"
-          list="providerNameData" placeholder="Выберите значение из списка" disabled required></label>
+      <label class="listArea labelProviderName">Поставщик<input autocomplete="off" id="providerName" type="text"
+          list="providerNameData" placeholder="Выберите значение из списка"
+          onchange="LoadData('providerName', value, 'providerNameData')" disabled required></label>
       <datalist id="providerNameData">
       </datalist>
-      <label class="listArea categoryName">Категория<input id="categoryName" type="text" list="listCategoryData"
+      <label class="listArea labelCategoryName">Категория<input id="categoryName" type="text" list="listCategoryData"
           placeholder="Выберите значение из списка" onchange="LoadData('categoryName', value, 'listCategoryData')"
           disabled required></label>
       <datalist id="listCategoryData">
       </datalist>
-      <label class="listArea modelName">Модель<input id="modelName" type="text" list="listModelData"
+      <label class="listArea labelModelName">Модель<input id="modelName" type="text" list="listModelData"
           placeholder="Выберите значение из списка" onchange="LoadData('modelName', value, 'listModelData')" disabled
           required></label>
       <datalist id="listModelData">
       </datalist>
-      <label class="listArea spacePartName">Запчасть<input id="spacePartName" type="text" list="listSpacePartData"
+      <label class="listArea labelSpacePartName">Запчасть<input id="spacePartName" type="text" list="listSpacePartData"
           placeholder="Выберите значение из списка" onchange="LoadData('spacePartName', value, 'listSpacePartData')"
           disabled required></label>
       <datalist id="listSpacePartData">
       </datalist>
-      <label class="listArea labelDateReceipt">Дата поступления<input id="dateReceipt" type="date" required></label>
-      <label class="listArea labeDateGuarantee">Гарантия до<input id="dateGuarantee" type="date"></label>
-      <label class="listArea labelArea">Место<input id="listArea" type="text" list="listAreaData"
-          placeholder="Выберите значение из списка" onchange="changeInputSelect(value, list, id)" required></label>
+      <label class="listArea labelQuantity">Количество<input id="quantity" type="number" value="1"
+          placeholder="Введите количество" required></label>
+      <label class="listArea labelSerialNumber">Серийный номер<input id="serialNumber" type="text"
+          placeholder="Введите номер" required></label>
+      <label class="listArea labelInventoryNumber">Инвентарный номер<input id="inventoryNumber" type="text"
+          placeholder="Введите номер" required></label>
+      <label class="listArea labeDateReceipt">Дата поступления<input id="dateReceipt" type="date"></label>
+      <label class="listArea labelAareaName">Склад<input id="areaName" type="text" list="listAreaData"
+          placeholder="Выберите значение из списка" onchange="LoadData('areaName', value, 'listAreaData')"
+          required></label>
       <datalist id="listAreaData">
       </datalist>
-      <label class="listArea">Комментарии<textarea class="comment" id="comment" name="comment"
+      <label class="listArea labelActNumber">Номер акта<input id="actserialNumber" type="text"
+          placeholder="Введите номер" required></label>
+      <label class="listArea labelComment">Комментарии<textarea class="comment" id="comment" name="comment"
           rows="3"></textarea></label>
+      <div class="listArea checkboxContainer">
+        <input type="checkbox" id="print" name="print" checked class="checkboxInput">
+        <label for="print">На печать</label>
+      </div>
       <div class="buttonGroup">
-        <button id="btnOK" type="submit" onclick="Submit()">Переместить</button>
-        <button id="btnClose" type="button" id="sidebarClose" onclick="closeForm()">Закрыть сайдбар</button>
+        <button id="btnOK" type="button" onclick="Submit()">Сохранить</button>
       </div>
     </div>
   </form>
 </body>
-<!-- <script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script> -->
 <script>
   const data = [
     ['Весы', 'SM - 100', 'Термоголовка', ],
@@ -215,34 +238,37 @@
     ['Весы', 'SM - 5000', 'Кассета', ],
     ['Весы', 'Dibal - 525', 'Термоголовка', ],
     ['Весы', 'Dibal - 525', 'Валик', ],
-    ['ФР', 'СП - 402', 'Печатющий механизм', ],
+    ['ФР', 'СП - 402', 'Печатающий механизм', ],
     ['ФР', 'СП - 402', 'Термоголовка', ],
     ['ФР', 'СП - 802', 'Термоголовка', ],
-    ['ФР', 'СП - 802', 'Печатющий механизм', ],
-    ['ФР', 'Атол - 22 ПТК', 'Печатющий механизм', ],
+    ['ФР', 'СП - 802', 'Печатающий механизм', ],
+    ['ФР', 'Атол - 22 ПТК', 'Печатающий механизм', ],
     ['ФР', 'Атол - 22 ПТК', 'Термоголовка', ],
     ['ФН', 'ФН', 'ФН', ],
     ['Системный блокСистемный блок', 'IBM', 'Материнская плата', ],
     ['Денежный ящик', 'Dosmar', 'пружины', ]
   ]
-  const suppliers = ['ООО "Партнер Премиум"', 'ООО "РитейлГрупп"', 'ООО "Ситилинк"', 'ООО "КОМПЬЮЛАН"',
-    'ООО "Регард МСК"', 'ООО "РитейлГрупп"', 'ООО "Ситилинк"', 'ООО "КОМПЬЮЛАН"', 'ООО "Регард МСК"',
-    'ООО "РитейлГрупп"', 'ООО "Ситилинк"', 'ООО "КОМПЬЮЛАН"', 'ООО "Регард МСК"', 'ООО "РитейлГрупп"',
-    'ООО "Ситилинк"', 'ООО "КОМПЬЮЛАН"', 'ООО "Регард МСК"'
+  const warehouse = ['Основной склад', 'Фролов П.', 'Ткаченков С.', 'Калинин А.', 'Гловацкий А.']
+  const suppliers = ['Неизвестный', 'ООО "Партнер Премиум"', 'ООО "РитейлГрупп"', 'ООО "Ситилинк"', 'ООО "КОМПЬЮЛАН"',
+    'ООО "Регард МСК"'
   ]
-  // let id = []
-  // let problemId
-  let svg =
+  let problemIdInput = ''
+  const svg =
     "<svg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 455.111 455.111' style='enable-background:new 0 0 455.111 455.111;' xml:space='preserve'><circle style='fill:#E24C4B;' cx='227.556' cy='227.556' r='227.556'/><path style='fill:#D1403F;' d='M455.111,227.556c0,125.156-102.4,227.556-227.556,227.556c-72.533,0-136.533-32.711-177.778-85.333c38.4,31.289,88.178,49.778,142.222,49.778c125.156,0,227.556-102.4,227.556-227.556c0-54.044-18.489-103.822-49.778-142.222C422.4,91.022,455.111,155.022,455.111,227.556z'/><path style='fill:#FFFFFF;' d='M331.378,331.378c-8.533,8.533-22.756,8.533-31.289,0l-72.533-72.533l-72.533,72.533c-8.533,8.533-22.756,8.533-31.289,0c-8.533-8.533-8.533-22.756,0-31.289l72.533-72.533l-72.533-72.533c-8.533-8.533-8.533-22.756,0-31.289c8.533-8.533,22.756-8.533,31.289,0l72.533,72.533l72.533-72.533c8.533-8.533,22.756-8.533,31.289,0c8.533,8.533,8.533,22.756,0,31.289l-72.533,72.533l72.533,72.533C339.911,308.622,339.911,322.844,331.378,331.378z'/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>";
+  const svg2 =
+    "<svg version='1.0' xmlns='http://www.w3.org/2000/svg'  width='1222.000000pt' height='1280.000000pt' viewBox='0 0 1222.000000 1280.000000' preserveAspectRatio='xMidYMid meet'><metadata>Created by potrace 1.15, written by Peter Selinger 2001-2017</metadata><g transform='translate(0.000000,1280.000000) scale(0.100000,-0.100000)'fill='#4caf50' stroke='none'><path d='M7271 12780 c-79 -21 -133 -55 -155 -98 -8 -16 -18 -93 -25 -187 -80 -1109 -253 -1873 -531 -2343 -141 -238 -279 -387 -585 -630 -340 -271 -528 -471 -629 -670 -15 -30 -72 -165 -128 -300 -300 -738 -565 -1282 -836 -1719 -265 -425 -548 -739 -783 -867 -116 -63 -180 -76 -365 -76 l-164 0 0 -2625 c0 -1444 2 -2625 5 -2625 3 0 62 -11 132 -24 71 -14 251 -48 400 -75 150 -28 393 -73 540 -101 1744 -324 1588 -298 1917 -325 485 -39 1028 -73 1566 -97 369 -16 1398 -16 1650 0 515 34 826 90 1010 182 324 163 742 555 873 818 l42 85 6 336 c4 246 9 345 19 371 29 76 94 154 305 366 236 236 306 319 360 429 80 163 68 256 -85 635 -101 252 -140 380 -140 464 0 103 64 208 270 441 229 260 292 369 276 481 -10 75 -62 184 -179 376 -202 333 -256 458 -243 557 10 73 56 154 182 321 223 295 252 353 240 486 -19 213 -189 556 -409 829 -83 103 -245 260 -322 311 -169 114 -421 159 -1110 195 -242 13 -1334 18 -2050 9 l-410 -5 -24 70 c-48 138 -29 362 53 622 81 256 179 480 450 1021 107 215 214 434 236 488 85 205 148 438 187 698 22 140 25 637 5 761 -73 454 -193 740 -413 978 -296 321 -816 521 -1138 437z'/> <path d='M386 6129 c-123 -29 -263 -139 -324 -255 -66 -127 -62 65 -62 -2674 0 -2181 2 -2493 15 -2549 43 -182 187 -329 370 -377 64 -17 1712 -20 1785 -3 181 42 346 215 380 398 14 74 14 4988 0 5062 -34 183 -199 356 -380 398 -57 13 -1728 13 -1784 0z'/> </g> </svg>"
 
   window.onload = function () {
     const currentDate = getDate()
     document.getElementById("dateReceipt").defaultValue = currentDate + "";
+    document.getElementById("areaName").defaultValue = warehouse[0];
+
     // google.script.run
     //   .withSuccessHandler(onSuccess)
     //   .getClassifier('getClassifier');
     onSuccess('getSuppliers')
     onSuccess('getClassifier')
+    onSuccess('getWarehouse')
   }
 
   function LoadData(type, input, currentList) {
@@ -250,6 +276,7 @@
       const checkList = Array.from(document.getElementById(currentList).children).map(item => item.value)
       if (!checkValue(input, checkList)) {
         document.getElementById(type).value = ''
+        problemIdInput = type
         return
       }
       const list = getUnique(data.map(value => {
@@ -267,6 +294,7 @@
       const checkList = Array.from(document.getElementById(currentList).children).map(item => item.value)
       if (!checkValue(input, checkList)) {
         document.getElementById(type).value = ''
+        problemIdInput = type
         return
       }
       const list = getUnique(data.map(value => {
@@ -278,10 +306,11 @@
       document.getElementById('spacePartName').value = ''
       prepareList(list, 'Запчасть', 'listSpacePartData', 'spacePartName')
     }
-    if (type === 'spacePartName') {
-      const checkList = Array.from(element.children).map(item => item.value)
+    if (type === 'spacePartName' || type === 'providerName' || type === 'areaName') {
+      const checkList = Array.from(document.getElementById(currentList).children).map(item => item.value)
       if (!checkValue(input, checkList)) {
         document.getElementById(type).value = ''
+        problemIdInput = type
         return
       }
     }
@@ -295,6 +324,10 @@
       const list = getUnique(data.map(value => value[0]))
       prepareList(list, 'Категория', 'listCategoryData', 'categoryName')
     }
+    if (request === 'getWarehouse') {
+      prepareList(warehouse, 'Склад', 'listAreaData', 'areaName')
+    }
+
   }
 
   function clearList(nameData) {
@@ -323,28 +356,23 @@
     return false
   }
 
-  function Submit() {
-    let form = document.getElementById('form');
-    let record = true;
-    [...form.elements].forEach(input => {
-      if (input.type === 'text' && input.value === '') {
-        record = false
-      }
-    })
-    if (!record) return false
+  function Submit(e) {
     document.querySelector('.back').style.display = "block";
-    let fulldate = document.getElementById('dateReceipt').valueAsDate
-    let date = convertDate(fulldate)
-    let guarnateeDate = document.getElementById('dateGuarantee').valueAsDate
-    let gDate = guarnateeDate !== null ? guarnateeDate = convertDate(guarnateeDate) : ''
-    let whereFrom = document.getElementById('providerName').value
-    let there = document.getElementById('listArea').value
-    let line = date + ":: Поступление: " + whereFrom + " -> " + there
+    let form = document.getElementById('form');
+    const dataSend = [...form.elements].reduce((acc, input) => {
+      obj = input.id === 'print' ? {
+        [input.id]: input.checked
+      } : {
+        [input.id]: input.value
+      }
+      return {
+        ...acc,
+        ...obj
+      }
+    }, {})
+    console.log('dataSend = ', dataSend)
 
-    let array = [document.getElementById('listName').value, document.getElementById('listMaker').value, document
-      .getElementById('listModel').value, document.getElementById('listSerialNumber').value, date, gDate, there,
-      document.getElementById("comment").value, line
-    ]
+    // let line = date + ":: Поступление: " + whereFrom + " -> " + there
 
     google.script.run
       .withSuccessHandler(function (resultMsg) {
@@ -363,37 +391,12 @@
     return (dd + "." + mm + "." + yyyy)
   }
 
-  function changeInputSelect(value, list, id, listData, label, listName, label2, value) {
-    if (value == "") return true;
-    for (let prop in list.options) {
-      if (list.options[prop].value === value) {
-        if (listData) {
-          LoadData(listData, label, listName, label2, value)
-        }
-        return (true);
-      }
-    };
-    let inputValue = document.getElementById(id);
-    inputValue.value = "";
-    let message1 = "Такого значения ";
-    let message2 = " нет в списке. Пожалуйста, выберите значение из списка.";
-    let modal = document.querySelector('.modal');
-    modal.innerHTML = svg + "<div class='modal_text'>" + message1 + "<b>" + value + "</b>" + message2 +
-      "</div><button id='buttonOK' onClick='closeModal()'>OK</button>";
-    modal.style.display = "flex";
-    document.querySelector('.back').style.display = "block";
-    document.getElementById('buttonOK').focus();
-    problemId = id;
-  }
-
   function modalWrongValue(value) {
     const back = document.querySelector('.back')
-    console.log('back = ', back)
     back.style.display = "block";
     let message1 = "Такого значения ";
     let message2 = " нет в списке. Пожалуйста, выберите значение из списка.";
     const modal = document.querySelector('.modal');
-    console.log('modal = ', modal)
     modal.innerHTML = svg + "<div class='modal_text'>" + message1 + "<b>" + value + "</b>" + message2 +
       "</div><button id='buttonOK' onClick='closeModal()'>OK</button>";
     modal.style.display = "flex";
@@ -401,9 +404,9 @@
   }
 
   function closeModal() {
-    console.log('closeModal')
     document.querySelector('.modal').style.display = "none";
     document.querySelector('.back').style.display = "none";
+    document.getElementById(problemIdInput).focus();
   }
 
   function getDate() {
@@ -420,8 +423,7 @@
       mm = '0' + mm;
     }
     today = yyyy + '-' + mm + '-' + dd;
-    let guarantee = yyyy2 + '-' + mm + '-' + dd
-    return
+    return today
   }
 
   function getUnique(data) {
