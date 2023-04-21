@@ -56,7 +56,8 @@
   .listSelect select,
   .listSelect input[type=text],
   .listSelect input[type=number],
-  .listSelect input[type=date] {
+  .listSelect input[type=date],
+  .listSelect input[type=datetime-local] {
     display: block;
     /* margin: 0 auto; */
     /* background: -webkit-gradient(linear, left top, left bottom, from(#30cfd0), to(#330867));
@@ -194,23 +195,23 @@
           disabled required></label>
       <datalist id="listCategoryData">
       </datalist>
+      <label class="listArea labelManufacturerName">Производитель<input id="manufacturerName" type="text"
+          list="listManufacturerData" placeholder="Выберите значение из списка"
+          onchange="LoadData('manufacturerName', value, 'listManufacturerData')" disabled required></label>
+      <datalist id="listManufacturerData">
+      </datalist>
       <label class="listArea labelModelName">Модель<input id="modelName" type="text" list="listModelData"
           placeholder="Выберите значение из списка" onchange="LoadData('modelName', value, 'listModelData')" disabled
           required></label>
       <datalist id="listModelData">
       </datalist>
-      <label class="listArea labelSpacePartName">Запчасть<input id="spacePartName" type="text" list="listSpacePartData"
-          placeholder="Выберите значение из списка" onchange="LoadData('spacePartName', value, 'listSpacePartData')"
-          disabled required></label>
-      <datalist id="listSpacePartData">
-      </datalist>
-      <label class="listArea labelQuantity">Количество<input id="quantity" type="number" value="1"
+      <label class="listArea labelQuantity">Клиент<input id="quantity" type="text" value="1"
           placeholder="Введите количество" required></label>
       <label class="listArea labelSerialNumber">Серийный номер<input id="serialNumber" type="text"
           placeholder="Введите номер" required></label>
       <label class="listArea labelInventoryNumber">Инвентарный номер<input id="inventoryNumber" type="text"
           placeholder="Введите номер" required></label>
-      <label class="listArea labeDateReceipt">Дата поступления<input id="dateReceipt" type="date"></label>
+      <label class="listArea labeDateReceipt">Дата поступления<input id="dateReceipt" type="datetime-local"></label>
       <label class="listArea labelAareaName">Склад<input id="areaName" type="text" list="listAreaData"
           placeholder="Выберите значение из списка" onchange="LoadData('areaName', value, 'listAreaData')"
           required></label>
@@ -232,26 +233,22 @@
 </body>
 <script>
   const data = [
-    ['Весы', 'SM - 100', 'Термоголовка', ],
-    ['Весы', 'SM - 100', 'Валик', ],
-    ['Весы', 'SM - 5000', 'Термоголовка', ],
-    ['Весы', 'SM - 5000', 'Кассета', ],
-    ['Весы', 'Dibal - 525', 'Термоголовка', ],
-    ['Весы', 'Dibal - 525', 'Валик', ],
-    ['ФР', 'СП - 402', 'Печатающий механизм', ],
-    ['ФР', 'СП - 402', 'Термоголовка', ],
-    ['ФР', 'СП - 802', 'Термоголовка', ],
-    ['ФР', 'СП - 802', 'Печатающий механизм', ],
-    ['ФР', 'Атол - 22 ПТК', 'Печатающий механизм', ],
-    ['ФР', 'Атол - 22 ПТК', 'Термоголовка', ],
+    ['Весы', 'Digi', 'SM - 100', ],
+    ['Весы', 'Digi', 'SM - 5000', ],
+    ['Весы', 'Dibal', 'Dibal - 525', ],
+    ['Весы', 'Dibal', 'Dibal - 525', ],
+    ['ФР', 'СП', 'СП - 402', ],
+    ['ФР', 'СП', 'СП - 802', ],
+    ['ФР', 'Атол', 'Атол - 22 ПТК', ],
     ['ФН', 'ФН', 'ФН', ],
-    ['Системный блокСистемный блок', 'IBM', 'Материнская плата', ],
-    ['Денежный ящик', 'Dosmar', 'пружины', ]
+    ['Системный блокСистемный блок', 'IBM', 'IBM-340', ],
+    ['Денежный ящик', 'Dosmar', 'Dosmar', ]
   ]
   const warehouse = ['Основной склад', 'Фролов П.', 'Ткаченков С.', 'Калинин А.', 'Гловацкий А.']
   const suppliers = ['Неизвестный', 'ООО "Партнер Премиум"', 'ООО "РитейлГрупп"', 'ООО "Ситилинк"', 'ООО "КОМПЬЮЛАН"',
     'ООО "Регард МСК"'
   ]
+  const clientEquip = ['Наше', 'Перекресток', 'Пятерочка']
   let problemIdInput = ''
   const svg =
     "<svg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 455.111 455.111' style='enable-background:new 0 0 455.111 455.111;' xml:space='preserve'><circle style='fill:#E24C4B;' cx='227.556' cy='227.556' r='227.556'/><path style='fill:#D1403F;' d='M455.111,227.556c0,125.156-102.4,227.556-227.556,227.556c-72.533,0-136.533-32.711-177.778-85.333c38.4,31.289,88.178,49.778,142.222,49.778c125.156,0,227.556-102.4,227.556-227.556c0-54.044-18.489-103.822-49.778-142.222C422.4,91.022,455.111,155.022,455.111,227.556z'/><path style='fill:#FFFFFF;' d='M331.378,331.378c-8.533,8.533-22.756,8.533-31.289,0l-72.533-72.533l-72.533,72.533c-8.533,8.533-22.756,8.533-31.289,0c-8.533-8.533-8.533-22.756,0-31.289l72.533-72.533l-72.533-72.533c-8.533-8.533-8.533-22.756,0-31.289c8.533-8.533,22.756-8.533,31.289,0l72.533,72.533l72.533-72.533c8.533-8.533,22.756-8.533,31.289,0c8.533,8.533,8.533,22.756,0,31.289l-72.533,72.533l72.533,72.533C339.911,308.622,339.911,322.844,331.378,331.378z'/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>";
@@ -260,6 +257,7 @@
 
   window.onload = function () {
     const currentDate = getDate()
+    console.log('currentDate = ', currentDate)
     document.getElementById("dateReceipt").defaultValue = currentDate + "";
     document.getElementById("areaName").defaultValue = warehouse[0];
 
@@ -269,6 +267,7 @@
     onSuccess('getSuppliers')
     onSuccess('getClassifier')
     onSuccess('getWarehouse')
+    onSuccess('getClientEquip')
   }
 
   function LoadData(type, input, currentList) {
@@ -286,11 +285,11 @@
       }).filter(value => value !== undefined))
       clearList('listModelData')
       document.getElementById('modelName').value = ''
-      clearList('listSpacePartData')
-      document.getElementById('spacePartName').value = ''
-      prepareList(list, 'Модель', 'listModelData', 'modelName')
+      clearList('listManufacturerData')
+      document.getElementById('manufacturerName').value = ''
+      prepareList(list, 'Производитель', 'listManufacturerData', 'manufacturerName')
     }
-    if (type === 'modelName') {
+    if (type === 'manufacturerName') {
       const checkList = Array.from(document.getElementById(currentList).children).map(item => item.value)
       if (!checkValue(input, checkList)) {
         document.getElementById(type).value = ''
@@ -302,11 +301,11 @@
           return value[2]
         }
       }).filter(value => value !== undefined))
-      clearList('listSpacePartData')
-      document.getElementById('spacePartName').value = ''
-      prepareList(list, 'Запчасть', 'listSpacePartData', 'spacePartName')
+      clearList('listModelData')
+      document.getElementById('modelName').value = ''
+      prepareList(list, 'Модель', 'listModelData', 'modelName')
     }
-    if (type === 'spacePartName' || type === 'providerName' || type === 'areaName') {
+    if (type === 'modelName' || type === 'providerName' || type === 'areaName' || type === 'clientEquipName') {
       const checkList = Array.from(document.getElementById(currentList).children).map(item => item.value)
       if (!checkValue(input, checkList)) {
         document.getElementById(type).value = ''
@@ -327,6 +326,9 @@
     if (request === 'getWarehouse') {
       prepareList(warehouse, 'Склад', 'listAreaData', 'areaName')
     }
+    // if (request === 'getClientEquip') {
+    //   prepareList(clientEquip, 'Клиент/Оборудование', 'clientEquipNameData', 'clientEquipName')
+    // }
 
   }
 
@@ -416,13 +418,29 @@
     let yyyy = today.getFullYear();
     let yyyy2 = today.getFullYear() + 1;
 
+    let hh = today.getHours()
+    let min = today.getMinutes()
+    let ss = today.getSeconds()
+
     if (dd < 10) {
       dd = '0' + dd;
     }
     if (mm < 10) {
       mm = '0' + mm;
     }
-    today = yyyy + '-' + mm + '-' + dd;
+
+    if (hh < 10) {
+      hh = '0' + hh;
+    }
+    if (min < 10) {
+      min = '0' + min;
+    }
+    if (ss < 10) {
+      ss = '0' + ss;
+    }
+
+
+    today = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + min + ':' + ss;
     return today
   }
 
