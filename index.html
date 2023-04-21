@@ -225,7 +225,7 @@
         <label for="print">На печать</label>
       </div>
       <div class="buttonGroup">
-        <button id="btnOK" type="button" onclick="Submit()">Сохранить</button>
+        <button id="btnOK" type="button" onclick="SubmitForm()">Сохранить</button>
       </div>
     </div>
   </form>
@@ -356,7 +356,7 @@
     return false
   }
 
-  function Submit(e) {
+  function SubmitForm(e) {
     document.querySelector('.back').style.display = "block";
     let form = document.getElementById('form');
     const dataSend = [...form.elements].reduce((acc, input) => {
@@ -371,15 +371,15 @@
       }
     }, {})
     console.log('dataSend = ', dataSend)
-
+    form.reset()
     // let line = date + ":: Поступление: " + whereFrom + " -> " + there
 
-    google.script.run
-      .withSuccessHandler(function (resultMsg) {
-        alert(resultMsg);
-        document.querySelector('.back').style.display = "none";
-      })
-      .writeRow('Данные', array);
+    // google.script.run
+    //   .withSuccessHandler(function (resultMsg) {
+    //     alert(resultMsg);
+    //     document.querySelector('.back').style.display = "none";
+    //   })
+    //   .writeRow('Данные', array);
   }
 
   function convertDate(fulldate) {
